@@ -5,7 +5,7 @@
   "start_url": "/tute/",
   "scope": "/tute/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "landscape",
   "background_color": "#0a0f0a",
   "theme_color": "#10b981",
   "categories": ["games", "entertainment"],
