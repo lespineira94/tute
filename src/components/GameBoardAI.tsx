@@ -69,10 +69,10 @@ interface GameBoardAIProps {
 
 // Posiciones relativas: 0 = yo (abajo), 1 = derecha, 2 = enfrente, 3 = izquierda
 const POSITION_STYLES = {
-  0: 'bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2', // Yo
-  1: 'right-1 sm:right-4 top-[35%] sm:top-1/2 -translate-y-1/2',   // Derecha
-  2: 'top-14 sm:top-4 left-1/2 -translate-x-1/2',    // Enfrente
-  3: 'left-1 sm:left-4 top-[35%] sm:top-1/2 -translate-y-1/2',    // Izquierda
+  0: 'bottom-4 left-1/2 -translate-x-1/2', // Yo
+  1: 'right-4 top-1/2 -translate-y-1/2',   // Derecha
+  2: 'top-4 left-1/2 -translate-x-1/2',    // Enfrente
+  3: 'left-4 top-1/2 -translate-y-1/2',    // Izquierda
 };
 
 // Orden de los palos (oros, copas, espadas, bastos)
@@ -331,8 +331,8 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
       </div>
 
       {/* Mesa de juego central - centrada con las cartas */}
-      <div className="absolute top-[40%] sm:top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-        <div className="w-[280px] h-[200px] sm:w-[400px] sm:h-[280px] lg:w-[560px] lg:h-[380px] bg-gradient-to-br from-emerald-800/40 to-green-900/50 rounded-[50px] sm:rounded-[80px] lg:rounded-[100px] border-2 border-emerald-600/30 shadow-[0_0_60px_rgba(16,185,129,0.15),inset_0_2px_40px_rgba(0,0,0,0.3)]" />
+      <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+        <div className="w-[560px] h-[380px] bg-gradient-to-br from-emerald-800/40 to-green-900/50 rounded-[100px] border-2 border-emerald-600/30 shadow-[0_0_60px_rgba(16,185,129,0.15),inset_0_2px_40px_rgba(0,0,0,0.3)]" />
       </div>
       
       {/* Área principal del juego */}
@@ -353,7 +353,7 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
               className={`absolute ${POSITION_STYLES[relPos]} z-10`}
             >
               <div className={`
-                backdrop-blur-md rounded-xl sm:rounded-2xl px-2 py-1.5 sm:px-4 sm:py-3 min-w-[90px] sm:min-w-[140px] transition-all duration-300 border
+                backdrop-blur-md rounded-2xl px-4 py-3 min-w-[140px] transition-all duration-300 border
                 ${isWinner 
                   ? 'bg-amber-500/90 border-amber-400/50 shadow-lg shadow-amber-500/40 scale-105'
                   : isCurrent 
@@ -363,23 +363,23 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
                       : 'bg-emerald-900/40 border-emerald-700/30'
                 }
               `}>
-                <div className="flex items-center gap-1.5 sm:gap-3">
+                <div className="flex items-center gap-3">
                   <div className={`
-                    w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center text-sm sm:text-lg relative
+                    w-10 h-10 rounded-xl flex items-center justify-center text-lg relative
                     ${isWinner ? 'bg-black/20' : isCurrent ? 'bg-black/20' : isAlly ? 'bg-emerald-500/30' : 'bg-emerald-800/40'}
                   `}>
                     {isWinner ? '👑' : player.isAI ? '🤖' : '👤'}
                     {isLead && !isWinner && (
-                      <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-yellow-500 rounded-full flex items-center justify-center text-[6px] sm:text-[8px] font-bold text-black">
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 rounded-full flex items-center justify-center text-[8px] font-bold text-black">
                         M
                       </div>
                     )}
                   </div>
                   <div>
-                    <div className={`font-semibold text-xs sm:text-sm ${isWinner ? 'text-black' : isCurrent ? 'text-black' : 'text-white'}`}>
+                    <div className={`font-semibold text-sm ${isWinner ? 'text-black' : isCurrent ? 'text-black' : 'text-white'}`}>
                       {player.name}
                     </div>
-                    <div className={`text-[10px] sm:text-xs ${isWinner ? 'text-black/60' : isCurrent ? 'text-black/60' : 'text-white/50'}`}>
+                    <div className={`text-xs ${isWinner ? 'text-black/60' : isCurrent ? 'text-black/60' : 'text-white/50'}`}>
                       {isWinner ? '¡Gana!' : `${player.hand.length} cartas`}
                       {isCurrent && !isWinner && (
                         <span className="ml-1 inline-flex">
@@ -395,10 +395,10 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
         })}
 
         {/* Centro del tablero - Cartas jugadas */}
-        <div className="absolute top-[40%] sm:top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 sm:w-64 lg:w-80 h-36 sm:h-44 lg:h-56">
+        <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-56">
           <div className="relative w-full h-full flex items-center justify-center">
             {/* Contenedor centrado para las cartas */}
-            <div className="relative w-28 sm:w-40 lg:w-48 h-20 sm:h-28 lg:h-32">
+            <div className="relative w-48 h-32">
               {trickToShow.map((played, idx) => {
                 const relPos = getRelativePosition(played.position);
                 const isAnimating = animatingCards.has(played.card.id);
@@ -435,14 +435,14 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
                         : 'drop-shadow(0 8px 20px rgba(0,0,0,0.5))',
                       transform: isAnimating
                         ? `translate(calc(-50% + ${startPos.x}px), calc(-50% + ${startPos.y}px)) rotate(0deg) scale(1.1)`
-                        : `translate(calc(-50% + ${pos.x}px), calc(-50% + ${pos.y}px)) rotate(${pos.rotate}deg) scale(${isWinningCard ? 1.1 : 1})`,
+                        : `translate(calc(-50% + ${pos.x}px), calc(-50% + ${pos.y}px)) rotate(${pos.rotate}deg) scale(${isWinningCard ? 1.4 : 1.2})`,
                       transitionDuration: '400ms',
                       transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   >
-                    <Card card={played.card} size="sm" />
+                    <Card card={played.card} size="md" />
                     {isWinningCard && (
-                      <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-4 h-4 sm:w-6 sm:h-6 bg-amber-500 rounded-full flex items-center justify-center text-xs sm:text-sm shadow-lg animate-bounce">
+                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center text-sm shadow-lg animate-bounce">
                         👑
                       </div>
                     )}
@@ -462,28 +462,28 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
         </div>
 
         {/* Panel superior izquierdo - Marcador moderno */}
-        <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-20">
-          <div className="bg-neutral-900/90 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-4 border border-neutral-800 min-w-[100px] sm:min-w-[160px]">
-            <div className="text-neutral-500 text-[8px] sm:text-[10px] uppercase tracking-wider mb-1 sm:mb-3">Ronda {gameState.roundNumber}</div>
+        <div className="absolute top-4 left-4 z-20">
+          <div className="bg-neutral-900/90 backdrop-blur-md rounded-2xl p-4 border border-neutral-800 min-w-[160px]">
+            <div className="text-neutral-500 text-[10px] uppercase tracking-wider mb-3">Ronda {gameState.roundNumber}</div>
             
-            <div className="flex items-center justify-between gap-2 sm:gap-4">
+            <div className="flex items-center justify-between gap-4">
               <div className="text-center">
-                <div className="text-lg sm:text-2xl font-bold text-emerald-400">{gameState.scores[myTeam].points}</div>
-                <div className="text-[8px] sm:text-[10px] text-neutral-500 uppercase">Nos</div>
+                <div className="text-2xl font-bold text-emerald-400">{gameState.scores[myTeam].points}</div>
+                <div className="text-[10px] text-neutral-500 uppercase">Nos</div>
               </div>
-              <div className="text-neutral-600 text-base sm:text-xl font-light">:</div>
+              <div className="text-neutral-600 text-xl font-light">:</div>
               <div className="text-center">
-                <div className="text-lg sm:text-2xl font-bold text-rose-400">{gameState.scores[myTeam === 1 ? 2 : 1].points}</div>
-                <div className="text-[8px] sm:text-[10px] text-neutral-500 uppercase">Ellos</div>
+                <div className="text-2xl font-bold text-rose-400">{gameState.scores[myTeam === 1 ? 2 : 1].points}</div>
+                <div className="text-[10px] text-neutral-500 uppercase">Ellos</div>
               </div>
             </div>
             
-            <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-neutral-800">
-              <div className="flex justify-center gap-1.5 sm:gap-2">
+            <div className="mt-3 pt-3 border-t border-neutral-800">
+              <div className="flex justify-center gap-2">
                 {[1, 2, 3].map(g => (
-                  <div 
-                    key={g} 
-                    className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all ${
+                  <div
+                    key={g}
+                    className={`w-3 h-3 rounded-full transition-all ${
                       g <= gameState.scores[myTeam].games 
                         ? 'bg-emerald-400 shadow-lg shadow-emerald-400/50' 
                         : g <= gameState.scores[myTeam === 1 ? 2 : 1].games 
@@ -493,7 +493,7 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
                   />
                 ))}
               </div>
-              <div className="text-[7px] sm:text-[9px] text-neutral-600 text-center mt-1">Rondas</div>
+              <div className="text-[9px] text-neutral-600 text-center mt-1">Rondas</div>
             </div>
             
             {/* Botón historial de bazas */}
@@ -519,8 +519,8 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
 
         {/* Indicador de turno - moderno */}
         {isMyTurn && !isProcessing && (
-          <div className="absolute top-[35%] sm:top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-30">
-            <div className="bg-gradient-to-r from-emerald-500 to-green-500 text-white font-bold px-4 py-2 sm:px-6 sm:py-2.5 rounded-full shadow-xl shadow-emerald-500/40 flex items-center gap-2 text-sm sm:text-base">
+          <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-30">
+            <div className="bg-gradient-to-r from-emerald-500 to-green-500 text-white font-bold px-6 py-2.5 rounded-full shadow-xl shadow-emerald-500/40 flex items-center gap-2 text-base">
               <span className="w-2 h-2 bg-white/50 rounded-full animate-ping" />
               ¡Tu turno!
             </div>
@@ -530,7 +530,7 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
         {/* Botón salir - moderno */}
         <button
           onClick={onExit}
-          className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 px-3 py-2 sm:px-4 sm:py-2.5 bg-neutral-900/80 hover:bg-neutral-800 text-neutral-400 hover:text-white rounded-lg sm:rounded-xl text-xs sm:text-sm z-20 transition-all border border-neutral-800 backdrop-blur-md flex items-center gap-1 sm:gap-2"
+          className="absolute bottom-4 right-4 px-4 py-2.5 bg-neutral-900/80 hover:bg-neutral-800 text-neutral-400 hover:text-white rounded-xl text-sm z-20 transition-all border border-neutral-800 backdrop-blur-md flex items-center gap-2"
         >
           <span>←</span>
           <span className="hidden sm:inline">Salir</span>
@@ -538,7 +538,7 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
       </div>
 
       {/* Mi mano de cartas - en abanico realista */}
-      <div className="bg-gradient-to-t from-neutral-950 via-neutral-900/80 to-transparent pt-1 sm:pt-2 pb-4 sm:pb-8 relative z-10">
+      <div className="bg-gradient-to-t from-neutral-950 via-neutral-900/80 to-transparent pt-2 pb-8 relative z-10">
         <div className="max-w-4xl mx-auto px-2">
           {/* Contenedor del abanico */}
           <div 
@@ -594,9 +594,9 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
           </div>
           
           {/* Instrucciones - estilo moderno */}
-          <div className="text-center mt-2 sm:mt-4">
+          <div className="text-center mt-4">
             <div className={`
-              inline-flex items-center gap-1 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm transition-all
+              inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-all
               ${isMyTurn && !isProcessing 
                 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
                 : 'bg-emerald-900/30 text-emerald-600 border border-emerald-800/50'}
@@ -604,17 +604,15 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
               {isMyTurn && !isProcessing ? (
                 <>
                   <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-                  <span className="hidden sm:inline">Toca una carta para seleccionar, dos veces para jugar</span>
-                  <span className="sm:hidden">Toca 2 veces para jugar</span>
+                  <span>Toca una carta para seleccionar, dos veces para jugar</span>
                 </>
               ) : isProcessing ? (
                 <>
-                  <svg className="w-3 h-3 sm:w-4 sm:h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                  <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
-                  <span className="hidden sm:inline">Los bots están pensando...</span>
-                  <span className="sm:hidden">Pensando...</span>
+                  <span>Los bots están pensando...</span>
                 </>
               ) : (
                 <>
@@ -627,7 +625,7 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
           
           {/* Botones de cante cuando el jugador puede cantar */}
           {isMyTurn && !isProcessing && availableCantes && availableCantes.length > 0 && (
-            <div className="flex justify-center gap-2 sm:gap-3 mt-2 sm:mt-4 flex-wrap px-2">
+            <div className="flex justify-center gap-3 mt-4 flex-wrap px-2">
               {availableCantes.map((cante, idx) => {
                 const suitIcons: Record<Suit, string> = { oros: '🪙', copas: '🏆', espadas: '⚔️', bastos: '🏏' };
                 const is40 = cante.points === 40;
@@ -636,7 +634,7 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
                     key={idx}
                     onClick={() => onDeclareCante?.(cante.suit)}
                     className={`
-                      px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm flex items-center gap-1 sm:gap-2 transition-all
+                      px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2 transition-all
                       ${is40 
                         ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-black hover:from-amber-400 hover:to-yellow-400 shadow-lg shadow-amber-500/30' 
                         : 'bg-gradient-to-r from-emerald-500 to-teal-500 text-black hover:from-emerald-400 hover:to-teal-400 shadow-lg shadow-emerald-500/30'
