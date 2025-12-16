@@ -35,3 +35,58 @@ body {
   flex-direction: column;
 }
 
+/* Aviso para forzar horizontal en móviles */
+#rotate-notice {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.15), transparent 45%),
+    radial-gradient(circle at 70% 70%, rgba(34, 197, 94, 0.18), transparent 45%),
+    #050a05;
+  z-index: 9999;
+  color: #e5ffe9;
+  padding: 24px;
+  text-align: center;
+}
+
+#rotate-notice .rotate-card {
+  background: rgba(10, 15, 10, 0.85);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(16, 185, 129, 0.2);
+  border-radius: 16px;
+  padding: 20px 24px;
+  max-width: 420px;
+  width: 100%;
+}
+
+#rotate-notice .rotate-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+#rotate-notice .rotate-text {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #b7f7c8;
+}
+
+@media (orientation: portrait) {
+  body {
+    overflow: hidden;
+  }
+  #root {
+    display: none;
+  }
+  #rotate-notice {
+    display: flex;
+  }
+}
+
+@media (orientation: landscape) {
+  #rotate-notice {
+    display: none;
+  }
+}
+
