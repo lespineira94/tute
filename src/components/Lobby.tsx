@@ -16,16 +16,6 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, onStartAIGame, is
   const [playerName, setPlayerName] = useState('');
   const [roomCode, setRoomCode] = useState('');
   const [difficulty, setDifficulty] = useState<AIDifficulty>('medium');
-  const [lockLandscape, setLockLandscape] = useState(() => {
-    return localStorage.getItem('lockLandscape') === 'true';
-  });
-
-  const toggleLandscapeMode = () => {
-    const newValue = !lockLandscape;
-    setLockLandscape(newValue);
-    localStorage.setItem('lockLandscape', String(newValue));
-    document.body.classList.toggle('lock-landscape', newValue);
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -124,20 +114,6 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, onStartAIGame, is
                 >
                   <span>📖</span>
                   <span>Cómo jugar</span>
-                </button>
-                
-                {/* Botón para bloquear orientación apaisada */}
-                <button
-                  onClick={toggleLandscapeMode}
-                  className="w-full p-3 text-emerald-600 hover:text-emerald-400 hover:bg-emerald-900/50 rounded-xl transition-all text-sm flex items-center justify-between"
-                >
-                  <div className="flex items-center gap-2">
-                    <span>📱</span>
-                    <span>Modo Apaisado</span>
-                  </div>
-                  <div className={`w-10 h-5 rounded-full transition-colors ${lockLandscape ? 'bg-emerald-500' : 'bg-neutral-700'} relative`}>
-                    <div className={`absolute top-0.5 ${lockLandscape ? 'right-0.5' : 'left-0.5'} w-4 h-4 bg-white rounded-full transition-all`} />
-                  </div>
                 </button>
               </div>
             </div>

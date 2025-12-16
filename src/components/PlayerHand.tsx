@@ -10,7 +10,7 @@ interface PlayerHandProps {
   isCurrentPlayer?: boolean;
   faceUp?: boolean;
   position?: 'bottom' | 'top' | 'left' | 'right';
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   fanStyle?: boolean;
   dealAnimation?: boolean;
 }
@@ -65,6 +65,7 @@ export function PlayerHand({
   
   // Configuración del abanico
   const fanConfig = {
+    xs: { maxAngle: 20, cardSpread: 16, liftOnHover: 10 },
     sm: { maxAngle: 25, cardSpread: 22, liftOnHover: 15 },
     md: { maxAngle: 30, cardSpread: 28, liftOnHover: 20 },
     lg: { maxAngle: 35, cardSpread: 32, liftOnHover: 25 },

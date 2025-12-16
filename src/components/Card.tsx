@@ -5,13 +5,14 @@ interface CardProps {
   faceUp?: boolean;
   playable?: boolean;
   selected?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   onClick?: () => void;
   className?: string;
 }
 
 // Dimensiones de las cartas según tamaño (manteniendo proporción 185:275 de los PNGs)
 const SIZES = {
+  xs: { width: 40, height: 60 },
   sm: { width: 54, height: 80 },
   md: { width: 74, height: 110 },
   lg: { width: 111, height: 165 },

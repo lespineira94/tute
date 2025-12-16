@@ -586,7 +586,8 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
                           : 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))',
                     }}
                   >
-                    <Card card={card} size="lg" playable={canInteract} selected={isSelected} />
+                    <Card card={card} size="xs" className="sm:hidden" playable={canInteract} selected={isSelected} />
+                    <Card card={card} size="lg" className="hidden sm:block" playable={canInteract} selected={isSelected} />
                   </div>
                 </div>
               );
