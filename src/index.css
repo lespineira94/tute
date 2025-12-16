@@ -35,9 +35,9 @@ body {
   flex-direction: column;
 }
 
-/* Forzar orientación landscape en móviles */
+/* Forzar orientación landscape en móviles (solo si está activado) */
 @media screen and (max-width: 768px) and (orientation: portrait) {
-  body::before {
+  body.lock-landscape::before {
     content: '';
     position: fixed;
     inset: 0;
@@ -48,7 +48,7 @@ body {
     justify-content: center;
   }
   
-  body::after {
+  body.lock-landscape::after {
     content: '📱 Por favor, gira tu dispositivo\Apara mejor experiencia';
     position: fixed;
     inset: 0;
@@ -63,7 +63,7 @@ body {
     white-space: pre-line;
   }
   
-  #root {
+  body.lock-landscape #root {
     filter: blur(10px);
     pointer-events: none;
   }

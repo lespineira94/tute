@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { usePWAInstall } from '../hooks/usePWAInstall';
 
 interface LobbyProps {
   onCreateRoom: (playerName: string) => void;
@@ -10,10 +9,19 @@ interface LobbyProps {
 }
 
 export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, error }: LobbyProps) {
-  const [mode, setMode] = useState<'select' | 'create' | 'join' | 'quick' | 'rules' | 'install'>('select');
+  const [mode, setMode] = useState<'select' | 'create' | 'join' | 'quick' | 'rules'>('select');
   const [playerName, setPlayerName] = useState('');
   const [roomCode, setRoomCode] = useState('');
-  const { isInstallable, isInstalled, install } = usePWAInstall();
+  const [lockLandscape, setLockLandscape] = useState(() => {
+    return localStorage.getItem('lockLandscape') === 'true';
+  });
+
+  const toggleLandscapeMode = () => {
+    const newValue = !lockLandscape;
+    setLockLandscape(newValue);
+    localStorage.setItem('lockLandscape', String(newValue));
+    document.body.classList.toggle('lock-landscape', newValue);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,29 +118,19 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, err
                   <span>Cómo jugar</span>
                 </button>
                 
-                {/* Botón de instalación PWA */}
-                {isInstalled ? (
-                  <div className="w-full p-3 text-emerald-500 text-sm flex items-center justify-center gap-2">
-                    <span>✅</span>
-                    <span>App instalada</span>
+                {/* Botón para bloquear orientación apaisada */}
+                <button
+                  onClick={toggleLandscapeMode}
+                  className="w-full p-3 text-emerald-600 hover:text-emerald-400 hover:bg-emerald-900/50 rounded-xl transition-all text-sm flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-2">
+                    <span>📱</span>
+                    <span>Modo Apaisado</span>
                   </div>
-                ) : isInstallable ? (
-                  <button
-                    onClick={install}
-                    className="w-full p-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white rounded-xl transition-all text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
-                  >
-                    <span>📲</span>
-                    <span>Instalar App</span>
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setMode('install')}
-                    className="w-full p-3 text-amber-600 hover:text-amber-400 hover:bg-amber-900/30 rounded-xl transition-all text-sm flex items-center justify-center gap-2"
-                  >
-                    <span>📲</span>
-                    <span>Instalar App</span>
-                  </button>
-                )}
+                  <div className={`w-10 h-5 rounded-full transition-colors ${lockLandscape ? 'bg-emerald-500' : 'bg-neutral-700'} relative`}>
+                    <div className={`absolute top-0.5 ${lockLandscape ? 'right-0.5' : 'left-0.5'} w-4 h-4 bg-white rounded-full transition-all`} />
+                  </div>
+                </button>
               </div>
             </div>
           )}
@@ -233,13 +231,7 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, err
             </div>
           )}
 
-          {mode === 'install' && (
-            <div className="p-6">
-              <button
-                onClick={() => setMode('select')}
-                className="text-emerald-600 hover:text-emerald-400 transition-colors text-sm flex items-center gap-2 mb-6"
-              >
-                <span>←</span> Volver
+          {mode === 'rules' && (
               </button>
 
               <h2 className="text-xl font-bold text-white mb-2">Instalar Tute</h2>
@@ -307,19 +299,6 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, err
                     </li>
                   </ol>
                 </div>
-
-                {isInstallable && (
-                  <button
-                    onClick={async () => {
-                      await install();
-                      setMode('select');
-                    }}
-                    className="w-full p-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
-                  >
-                    <span>📲</span>
-                    <span>Instalar ahora</span>
-                  </button>
-                )}
               </div>
             </div>
           )}
