@@ -31,10 +31,11 @@ export function Card({
   // Obtener el número de la carta (soportar tanto 'number' como 'value')
   const cardNumber = (card as any).number ?? (card as any).value ?? 1;
   
-  // Construir la ruta de la imagen
+  // Construir la ruta de la imagen usando BASE_URL para GitHub Pages
+  const baseUrl = import.meta.env.BASE_URL || '/';
   const imagePath = faceUp 
-    ? `/cards/${card.suit}-${cardNumber}.png`
-    : '/cards/back.png';
+    ? `${baseUrl}cards/${card.suit}-${cardNumber}.png`
+    : `${baseUrl}cards/back.png`;
 
   return (
     <div
