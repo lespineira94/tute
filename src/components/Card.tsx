@@ -5,17 +5,16 @@ interface CardProps {
   faceUp?: boolean;
   playable?: boolean;
   selected?: boolean;
-  size?: 'xs' | 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg';
   onClick?: () => void;
   className?: string;
 }
 
 // Dimensiones de las cartas según tamaño (manteniendo proporción 185:275 de los PNGs)
 const SIZES = {
-  xs: { width: 37, height: 55 },   // Para móvil pequeño
-  sm: { width: 46, height: 68 },   // Para móvil/tablero
-  md: { width: 60, height: 89 },   // Para tablero desktop
-  lg: { width: 85, height: 126 },  // Para mano del jugador
+  sm: { width: 54, height: 80 },
+  md: { width: 74, height: 110 },
+  lg: { width: 111, height: 165 },
 };
 
 export function Card({

@@ -203,39 +203,29 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
     return new Set(validCards.map(c => c.id));
   }, [isMyTurn, isProcessing, gameState.myHand, gameState.currentTrick, gameState.trumpSuit]);
 
-  // Detectar si es móvil
-  const [isMobile, setIsMobile] = useState(false);
-  
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 640);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Calcular posición en abanico (ajustado para móvil)
+  // Calcular posición en abanico
   const getCardTransform = (index: number, total: number, isSelected: boolean, isValid: boolean) => {
     const middleIndex = (total - 1) / 2;
     const offsetFromMiddle = index - middleIndex;
     
-    // Ángulo de rotación (máximo 35 grados en los extremos) - menor en móvil
-    const maxAngle = isMobile ? 20 : 30;
+    // Ángulo de rotación (máximo 35 grados en los extremos)
+    const maxAngle = 30;
     const angle = (offsetFromMiddle / Math.max(total - 1, 1)) * maxAngle * 2;
     
-    // Desplazamiento horizontal - menor en móvil
-    const spreadX = isMobile ? 22 : 38;
+    // Desplazamiento horizontal
+    const spreadX = 38;
     const translateX = offsetFromMiddle * spreadX;
     
-    // Arco vertical (cartas del centro más arriba) - menor en móvil
+    // Arco vertical (cartas del centro más arriba)
     const normalizedOffset = Math.abs(offsetFromMiddle) / Math.max(middleIndex, 1);
-    const arcLift = normalizedOffset * normalizedOffset * (isMobile ? 15 : 25);
+    const arcLift = normalizedOffset * normalizedOffset * 25;
     
-    // Elevación por selección/validez - menor en móvil
+    // Elevación por selección/validez
     let translateY = arcLift;
     if (isSelected) {
-      translateY = isMobile ? -25 : -40;
+      translateY = -40;
     } else if (isValid && isMyTurn) {
-      translateY = arcLift - (isMobile ? 10 : 15);
+      translateY = arcLift - 15;
     }
     
     return { angle, translateX, translateY };
@@ -596,7 +586,7 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
                           : 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))',
                     }}
                   >
-                    <Card card={card} size={isMobile ? "md" : "lg"} playable={canInteract} selected={isSelected} />
+                    <Card card={card} size="lg" playable={canInteract} selected={isSelected} />
                   </div>
                 </div>
               );
