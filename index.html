@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="screen-orientation" content="landscape" />
+    <meta name="x5-orientation" content="landscape" />
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#10b981" />
@@ -19,8 +21,8 @@
     <link rel="manifest" href="manifest.json" />
     
     <title>Tute - Juego de Cartas Español</title>
-    <script type="module" crossorigin src="/tute/assets/index-CUbMPDqy.js"></script>
-    <link rel="stylesheet" crossorigin href="/tute/assets/index-Dkr5Xd8f.css">
+    <script type="module" crossorigin src="/tute/assets/index-BtrF4N2T.js"></script>
+    <link rel="stylesheet" crossorigin href="/tute/assets/index-B_kQDewp.css">
   </head>
   <body>
     <div id="root"></div>
@@ -30,6 +32,28 @@
         <div class="rotate-text">Gira tu dispositivo para jugar en horizontal</div>
       </div>
     </div>
+    <script>
+      // Intentar bloquear orientación a landscape cuando el navegador lo permite (PWA instalada o fullscreen)
+      const tryLockOrientation = () => {
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock('landscape').catch(() => {});
+        }
+      };
+
+      const handleResize = () => {
+        const isPortrait = window.innerHeight > window.innerWidth;
+        document.body.classList.toggle('portrait-lock', isPortrait);
+        if (!isPortrait) tryLockOrientation();
+      };
+
+      window.addEventListener('resize', handleResize);
+      window.addEventListener('orientationchange', handleResize);
+      window.addEventListener('load', () => {
+        handleResize();
+        tryLockOrientation();
+      });
+    </script>
+
     
     <!-- Register Service Worker -->
     <script>
