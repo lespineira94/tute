@@ -83,3 +83,7 @@ tute/
 - **Frontend**: React 19, TypeScript, Tailwind CSS 4
 - **Backend**: PartyKit (WebSockets en edge)
 - **Build**: Vite 7
+
+## Versión móvil (React Native)
+
+Hay un plan para un repositorio separado con la app móvil en React Native. Sigue la guía en [`mobile/README.md`](mobile/README.md) para generarlo con Expo, reutilizar la lógica del mazo y conectarlo al mismo servidor PartyKit.
