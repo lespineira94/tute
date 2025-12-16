@@ -79,6 +79,7 @@ function App() {
       onCreateRoom={createRoom}
       onJoinRoom={joinRoom}
       onQuickPlay={startAIGame}
+      onStartAIGame={startAIGame}
       isConnecting={isConnecting}
       error={error}
     />

@@ -1,17 +1,21 @@
 import { useState } from 'react';
 
+type AIDifficulty = 'easy' | 'medium' | 'hard' | 'expert';
+
 interface LobbyProps {
   onCreateRoom: (playerName: string) => void;
   onJoinRoom: (roomCode: string, playerName: string) => void;
   onQuickPlay: (playerName: string) => void;
+  onStartAIGame?: (playerName: string, difficulty: AIDifficulty) => void;
   isConnecting: boolean;
   error: string | null;
 }
 
-export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, error }: LobbyProps) {
+export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, onStartAIGame, isConnecting, error }: LobbyProps) {
   const [mode, setMode] = useState<'select' | 'create' | 'join' | 'quick' | 'rules'>('select');
   const [playerName, setPlayerName] = useState('');
   const [roomCode, setRoomCode] = useState('');
+  const [difficulty, setDifficulty] = useState<AIDifficulty>('medium');
   const [lockLandscape, setLockLandscape] = useState(() => {
     return localStorage.getItem('lockLandscape') === 'true';
   });
@@ -33,7 +37,11 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, err
       if (!roomCode.trim()) return;
       onJoinRoom(roomCode.trim().toUpperCase(), playerName.trim());
     } else if (mode === 'quick') {
-      onQuickPlay(playerName.trim());
+      if (onStartAIGame) {
+        onStartAIGame(playerName.trim(), difficulty);
+      } else {
+        onQuickPlay(playerName.trim());
+      }
     }
   };
 
@@ -231,78 +239,6 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, err
             </div>
           )}
 
-          {mode === 'rules' && (
-              </button>
-
-              <h2 className="text-xl font-bold text-white mb-2">Instalar Tute</h2>
-              <p className="text-emerald-600 text-sm mb-6">Añade la app a tu dispositivo para jugar sin conexión</p>
-
-              <div className="space-y-4">
-                {/* iOS Safari */}
-                <div className="bg-emerald-900/40 rounded-xl p-4 border border-emerald-800/50">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-2xl">🍎</span>
-                    <h3 className="text-white font-semibold">iPhone / iPad (Safari)</h3>
-                  </div>
-                  <ol className="text-emerald-200/80 text-sm space-y-2">
-                    <li className="flex items-start gap-2">
-                      <span className="text-emerald-400 font-bold">1.</span>
-                      Pulsa el botón <span className="text-white">Compartir</span> (⬆️)
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-emerald-400 font-bold">2.</span>
-                      Selecciona <span className="text-white">"Añadir a pantalla de inicio"</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-emerald-400 font-bold">3.</span>
-                      Pulsa <span className="text-white">"Añadir"</span>
-                    </li>
-                  </ol>
-                </div>
-
-                {/* Android Chrome */}
-                <div className="bg-emerald-900/40 rounded-xl p-4 border border-emerald-800/50">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-2xl">🤖</span>
-                    <h3 className="text-white font-semibold">Android (Chrome)</h3>
-                  </div>
-                  <ol className="text-emerald-200/80 text-sm space-y-2">
-                    <li className="flex items-start gap-2">
-                      <span className="text-emerald-400 font-bold">1.</span>
-                      Pulsa el menú <span className="text-white">⋮</span> (3 puntos)
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-emerald-400 font-bold">2.</span>
-                      Selecciona <span className="text-white">"Instalar aplicación"</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-emerald-400 font-bold">3.</span>
-                      Confirma la instalación
-                    </li>
-                  </ol>
-                </div>
-
-                {/* Desktop */}
-                <div className="bg-emerald-900/40 rounded-xl p-4 border border-emerald-800/50">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-2xl">💻</span>
-                    <h3 className="text-white font-semibold">PC / Mac (Chrome/Edge)</h3>
-                  </div>
-                  <ol className="text-emerald-200/80 text-sm space-y-2">
-                    <li className="flex items-start gap-2">
-                      <span className="text-emerald-400 font-bold">1.</span>
-                      Busca el icono <span className="text-white">⊕</span> en la barra de direcciones
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-emerald-400 font-bold">2.</span>
-                      Pulsa <span className="text-white">"Instalar"</span>
-                    </li>
-                  </ol>
-                </div>
-              </div>
-            </div>
-          )}
-
           {(mode === 'create' || mode === 'join' || mode === 'quick') && (
             <form onSubmit={handleSubmit} className="p-6">
               <button
@@ -328,6 +264,62 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, err
               </div>
 
               <div className="space-y-4">
+                {mode === 'quick' && (
+                  <div>
+                    <label className="block text-emerald-500 text-xs mb-2 font-medium uppercase tracking-wide">Dificultad</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setDifficulty('easy')}
+                        className={`p-3 rounded-lg border transition-all ${
+                          difficulty === 'easy'
+                            ? 'bg-emerald-500/20 border-emerald-500 text-white'
+                            : 'bg-emerald-900/20 border-emerald-800/50 text-emerald-600 hover:border-emerald-700'
+                        }`}
+                      >
+                        <div className="font-semibold text-sm">🐥 Fácil</div>
+                        <div className="text-xs opacity-70">Principiante</div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDifficulty('medium')}
+                        className={`p-3 rounded-lg border transition-all ${
+                          difficulty === 'medium'
+                            ? 'bg-emerald-500/20 border-emerald-500 text-white'
+                            : 'bg-emerald-900/20 border-emerald-800/50 text-emerald-600 hover:border-emerald-700'
+                        }`}
+                      >
+                        <div className="font-semibold text-sm">🦅 Medio</div>
+                        <div className="text-xs opacity-70">Equilibrado</div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDifficulty('hard')}
+                        className={`p-3 rounded-lg border transition-all ${
+                          difficulty === 'hard'
+                            ? 'bg-emerald-500/20 border-emerald-500 text-white'
+                            : 'bg-emerald-900/20 border-emerald-800/50 text-emerald-600 hover:border-emerald-700'
+                        }`}
+                      >
+                        <div className="font-semibold text-sm">🦁 Difícil</div>
+                        <div className="text-xs opacity-70">Desafiante</div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDifficulty('expert')}
+                        className={`p-3 rounded-lg border transition-all ${
+                          difficulty === 'expert'
+                            ? 'bg-emerald-500/20 border-emerald-500 text-white'
+                            : 'bg-emerald-900/20 border-emerald-800/50 text-emerald-600 hover:border-emerald-700'
+                        }`}
+                      >
+                        <div className="font-semibold text-sm">🦈 Experto</div>
+                        <div className="text-xs opacity-70">Maestro</div>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-emerald-500 text-xs mb-2 font-medium uppercase tracking-wide">Nombre</label>
                   <input
