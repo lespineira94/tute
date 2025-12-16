@@ -10,7 +10,7 @@ interface LobbyProps {
 }
 
 export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, error }: LobbyProps) {
-  const [mode, setMode] = useState<'select' | 'create' | 'join' | 'quick' | 'rules'>('select');
+  const [mode, setMode] = useState<'select' | 'create' | 'join' | 'quick' | 'rules' | 'install'>('select');
   const [playerName, setPlayerName] = useState('');
   const [roomCode, setRoomCode] = useState('');
   const { isInstallable, isInstalled, install } = usePWAInstall();
@@ -111,7 +111,12 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, err
                 </button>
                 
                 {/* Botón de instalación PWA */}
-                {isInstallable && !isInstalled && (
+                {isInstalled ? (
+                  <div className="w-full p-3 text-emerald-500 text-sm flex items-center justify-center gap-2">
+                    <span>✅</span>
+                    <span>App instalada</span>
+                  </div>
+                ) : isInstallable ? (
                   <button
                     onClick={install}
                     className="w-full p-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white rounded-xl transition-all text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
@@ -119,13 +124,14 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, err
                     <span>📲</span>
                     <span>Instalar App</span>
                   </button>
-                )}
-                
-                {isInstalled && (
-                  <div className="w-full p-3 text-emerald-500 text-sm flex items-center justify-center gap-2">
-                    <span>✅</span>
-                    <span>App instalada</span>
-                  </div>
+                ) : (
+                  <button
+                    onClick={() => setMode('install')}
+                    className="w-full p-3 text-amber-600 hover:text-amber-400 hover:bg-amber-900/30 rounded-xl transition-all text-sm flex items-center justify-center gap-2"
+                  >
+                    <span>📲</span>
+                    <span>Instalar App</span>
+                  </button>
                 )}
               </div>
             </div>
@@ -223,6 +229,97 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, err
                     </div>
                   </div>
                 </section>
+              </div>
+            </div>
+          )}
+
+          {mode === 'install' && (
+            <div className="p-6">
+              <button
+                onClick={() => setMode('select')}
+                className="text-emerald-600 hover:text-emerald-400 transition-colors text-sm flex items-center gap-2 mb-6"
+              >
+                <span>←</span> Volver
+              </button>
+
+              <h2 className="text-xl font-bold text-white mb-2">Instalar Tute</h2>
+              <p className="text-emerald-600 text-sm mb-6">Añade la app a tu dispositivo para jugar sin conexión</p>
+
+              <div className="space-y-4">
+                {/* iOS Safari */}
+                <div className="bg-emerald-900/40 rounded-xl p-4 border border-emerald-800/50">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-2xl">🍎</span>
+                    <h3 className="text-white font-semibold">iPhone / iPad (Safari)</h3>
+                  </div>
+                  <ol className="text-emerald-200/80 text-sm space-y-2">
+                    <li className="flex items-start gap-2">
+                      <span className="text-emerald-400 font-bold">1.</span>
+                      Pulsa el botón <span className="text-white">Compartir</span> (⬆️)
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-emerald-400 font-bold">2.</span>
+                      Selecciona <span className="text-white">"Añadir a pantalla de inicio"</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-emerald-400 font-bold">3.</span>
+                      Pulsa <span className="text-white">"Añadir"</span>
+                    </li>
+                  </ol>
+                </div>
+
+                {/* Android Chrome */}
+                <div className="bg-emerald-900/40 rounded-xl p-4 border border-emerald-800/50">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-2xl">🤖</span>
+                    <h3 className="text-white font-semibold">Android (Chrome)</h3>
+                  </div>
+                  <ol className="text-emerald-200/80 text-sm space-y-2">
+                    <li className="flex items-start gap-2">
+                      <span className="text-emerald-400 font-bold">1.</span>
+                      Pulsa el menú <span className="text-white">⋮</span> (3 puntos)
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-emerald-400 font-bold">2.</span>
+                      Selecciona <span className="text-white">"Instalar aplicación"</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-emerald-400 font-bold">3.</span>
+                      Confirma la instalación
+                    </li>
+                  </ol>
+                </div>
+
+                {/* Desktop */}
+                <div className="bg-emerald-900/40 rounded-xl p-4 border border-emerald-800/50">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-2xl">💻</span>
+                    <h3 className="text-white font-semibold">PC / Mac (Chrome/Edge)</h3>
+                  </div>
+                  <ol className="text-emerald-200/80 text-sm space-y-2">
+                    <li className="flex items-start gap-2">
+                      <span className="text-emerald-400 font-bold">1.</span>
+                      Busca el icono <span className="text-white">⊕</span> en la barra de direcciones
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-emerald-400 font-bold">2.</span>
+                      Pulsa <span className="text-white">"Instalar"</span>
+                    </li>
+                  </ol>
+                </div>
+
+                {isInstallable && (
+                  <button
+                    onClick={async () => {
+                      await install();
+                      setMode('select');
+                    }}
+                    className="w-full p-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
+                  >
+                    <span>📲</span>
+                    <span>Instalar ahora</span>
+                  </button>
+                )}
               </div>
             </div>
           )}
