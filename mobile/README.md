@@ -8,7 +8,7 @@ Guía rápida para crear un repositorio separado con la versión móvil en React
 2. Inicializa el proyecto con Expo y TypeScript:
 
    ```bash
-   npx create-expo-app tute-mobile --template expo-template-blank-typescript
+   npx create-expo-app tute-mobile --template @expo/template-blank-typescript
    cd tute-mobile
    npm install partysocket
    ```
@@ -21,14 +21,19 @@ Guía rápida para crear un repositorio separado con la versión móvil en React
 4. Configura la URL del servidor PartyKit usando variables de entorno:
 
    ```env
-   PARTYKIT_HOST=ws://localhost:1999 # o la URL desplegada
+   # Desarrollo
+   EXPO_PUBLIC_PARTYKIT_HOST=http://localhost:1999
+   # Producción
+   # EXPO_PUBLIC_PARTYKIT_HOST=https://tu-dominio.partykit.dev
    ```
+
+   PartySocket usará `ws://` o `wss://` automáticamente según el esquema que definas.
 
 ## Ejemplo mínimo de `App.tsx`
 
 ```tsx
 import { useEffect, useState } from "react";
-import { SafeAreaView, Text, Button } from "react-native";
+import { SafeAreaView, Text } from "react-native";
 import PartySocket from "partysocket";
 
 export default function App() {
@@ -36,7 +41,7 @@ export default function App() {
 
   useEffect(() => {
     const socket = new PartySocket({
-      host: process.env.PARTYKIT_HOST ?? "ws://localhost:1999",
+      host: process.env.EXPO_PUBLIC_PARTYKIT_HOST ?? "http://localhost:1999",
       room: "lobby",
     });
 
@@ -62,7 +67,6 @@ export default function App() {
         Tute móvil (React Native)
       </Text>
       <Text style={{ color: "#f0f4f8" }}>{status}</Text>
-      <Button title="Refrescar estado" onPress={() => {}} />
     </SafeAreaView>
   );
 }
