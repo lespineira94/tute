@@ -1,0 +1,5 @@
+{
+  "name": "tute-server",
+  "main": "server.ts",
+  "compatibilityDate": "2024-12-01"
+}

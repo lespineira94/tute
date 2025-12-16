@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test WebSocket</title>
+</head>
+<body>
+  <h1>Test WebSocket</h1>
+  <button onclick="connect()">Conectar</button>
+  <button onclick="createRoom()">Crear Sala</button>
+  <div id="log"></div>
+  
+  <script>
+    let socket = null;
+    
+    function log(msg) {
+      document.getElementById('log').innerHTML += '<p>' + msg + '</p>';
+      console.log(msg);
+    }
+    
+    function connect() {
+      const roomCode = Math.random().toString(36).substring(2, 6).toUpperCase();
+      const url = 'ws://127.0.0.1:1999/party/' + roomCode;
+      log('Conectando a: ' + url);
+      
+      socket = new WebSocket(url);
+      
+      socket.onopen = function() {
+        log('✅ Conectado!');
+      };
+      
+      socket.onclose = function(e) {
+        log('❌ Cerrado: code=' + e.code + ' reason=' + e.reason);
+      };
+      
+      socket.onerror = function(e) {
+        log('⚠️ Error: ' + JSON.stringify(e));
+      };
+      
+      socket.onmessage = function(e) {
+        log('📨 Mensaje: ' + e.data);
+      };
+    }
+    
+    function createRoom() {
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        const msg = JSON.stringify({ type: 'CREATE_ROOM', playerName: 'TestPlayer' });
+        log('📤 Enviando: ' + msg);
+        socket.send(msg);
+      } else {
+        log('⚠️ Socket no conectado');
+      }
+    }
+  </script>
+</body>
+</html>
