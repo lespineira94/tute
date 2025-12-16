@@ -76,11 +76,9 @@ body {
   body {
     overflow: hidden;
   }
-  #root {
-    display: none;
-  }
   #rotate-notice {
     display: flex;
+    pointer-events: auto;
   }
 }
 
@@ -88,5 +86,15 @@ body {
   #rotate-notice {
     display: none;
   }
+}
+
+/* Refuerzo por JS: si body tiene .portrait-lock, muestra el aviso */
+body.portrait-lock {
+  overflow: hidden;
+}
+
+body.portrait-lock #rotate-notice {
+  display: flex;
+  pointer-events: auto;
 }
 
