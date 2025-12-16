@@ -7,5 +7,7 @@ export { PlayerInfo, PlayerPositions } from './PlayerInfo';
 export { CanteAnnouncement, CanteDialog } from './CanteAnnouncement';
 export { Lobby } from './Lobby';
 export { WaitingRoom } from './WaitingRoom';
+export { WaitingRoomP2P } from './WaitingRoomP2P';
 export { GameBoard } from './GameBoard';
 export { GameBoardAI } from './GameBoardAI';
+export { GameBoardP2P } from './GameBoardP2P';

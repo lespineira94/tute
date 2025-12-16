@@ -7,12 +7,14 @@ interface LobbyProps {
   onJoinRoom: (roomCode: string, playerName: string) => void;
   onQuickPlay: (playerName: string) => void;
   onStartAIGame?: (playerName: string, difficulty: AIDifficulty) => void;
+  onCreateOnlineRoom?: (playerName: string) => void;
+  onJoinOnlineRoom?: (roomCode: string, playerName: string) => void;
   isConnecting: boolean;
   error: string | null;
 }
 
-export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, onStartAIGame, isConnecting, error }: LobbyProps) {
-  const [mode, setMode] = useState<'select' | 'create' | 'join' | 'quick' | 'rules'>('select');
+export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, onStartAIGame, onCreateOnlineRoom, onJoinOnlineRoom, isConnecting, error }: LobbyProps) {
+  const [mode, setMode] = useState<'select' | 'create' | 'join' | 'quick' | 'online-create' | 'online-join' | 'rules'>('select');
   const [playerName, setPlayerName] = useState('');
   const [roomCode, setRoomCode] = useState('');
   const [difficulty, setDifficulty] = useState<AIDifficulty>('medium');
@@ -20,6 +22,8 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, onStartAIGame, is
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!playerName.trim()) return;
+
+    console.log('[Lobby] handleSubmit mode:', mode);
 
     if (mode === 'create') {
       onCreateRoom(playerName.trim());
@@ -31,6 +35,21 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, onStartAIGame, is
         onStartAIGame(playerName.trim(), difficulty);
       } else {
         onQuickPlay(playerName.trim());
+      }
+    } else if (mode === 'online-create') {
+      console.log('[Lobby] Creando sala P2P...');
+      if (onCreateOnlineRoom) {
+        onCreateOnlineRoom(playerName.trim());
+      } else {
+        console.error('[Lobby] onCreateOnlineRoom no está definido');
+      }
+    } else if (mode === 'online-join') {
+      if (!roomCode.trim()) return;
+      console.log('[Lobby] Uniéndose a sala P2P:', roomCode.trim());
+      if (onJoinOnlineRoom) {
+        onJoinOnlineRoom(roomCode.trim().toUpperCase(), playerName.trim());
+      } else {
+        console.error('[Lobby] onJoinOnlineRoom no está definido');
       }
     }
   };
@@ -76,23 +95,23 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, onStartAIGame, is
               </button>
 
               <button
-                onClick={() => setMode('create')}
+                onClick={() => setMode('online-create')}
                 className="w-full p-4 bg-emerald-900/50 hover:bg-emerald-800/50 text-white rounded-xl transition-all flex items-center justify-between group border border-emerald-700/50"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                    <span className="text-emerald-400 text-xl">+</span>
+                    <span className="text-emerald-400 text-xl">🌐</span>
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold">Crear Sala</div>
-                    <div className="text-xs text-neutral-500">Invita a tus amigos</div>
+                    <div className="font-semibold">Juego Online</div>
+                    <div className="text-xs text-neutral-500">Crea sala P2P</div>
                   </div>
                 </div>
                 <span className="text-neutral-600 group-hover:translate-x-1 transition-transform">→</span>
               </button>
 
               <button
-                onClick={() => setMode('join')}
+                onClick={() => setMode('online-join')}
                 className="w-full p-4 bg-emerald-900/50 hover:bg-emerald-800/50 text-white rounded-xl transition-all flex items-center justify-between group border border-emerald-700/50"
               >
                 <div className="flex items-center gap-3">
@@ -100,7 +119,7 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, onStartAIGame, is
                     <span className="text-emerald-400 text-xl">#</span>
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold">Unirse</div>
+                    <div className="font-semibold">Unirse Online</div>
                     <div className="text-xs text-neutral-500">Tengo un código</div>
                   </div>
                 </div>
@@ -215,7 +234,7 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, onStartAIGame, is
             </div>
           )}
 
-          {(mode === 'create' || mode === 'join' || mode === 'quick') && (
+          {(mode === 'create' || mode === 'join' || mode === 'quick' || mode === 'online-create' || mode === 'online-join') && (
             <form onSubmit={handleSubmit} className="p-6">
               <button
                 type="button"
@@ -227,14 +246,14 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, onStartAIGame, is
 
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl bg-emerald-500/20">
-                  {mode === 'quick' ? '⚡' : mode === 'create' ? '+' : '#'}
+                  {mode === 'quick' ? '⚡' : mode === 'online-create' ? '🌐' : mode === 'online-join' ? '#' : mode === 'create' ? '+' : '#'}
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">
-                    {mode === 'create' ? 'Crear Sala' : mode === 'join' ? 'Unirse' : 'Partida Rápida'}
+                    {mode === 'quick' ? 'Partida Rápida' : mode === 'online-create' ? 'Crear Sala Online' : mode === 'online-join' ? 'Unirse Online' : mode === 'create' ? 'Crear Sala' : 'Unirse'}
                   </h2>
                   <p className="text-emerald-600 text-sm">
-                    {mode === 'quick' ? 'Contra 3 bots' : mode === 'create' ? 'Genera un código' : 'Introduce el código'}
+                    {mode === 'quick' ? 'Contra 3 bots' : mode === 'online-create' ? 'Juego P2P con amigos' : mode === 'online-join' ? 'Introduce código P2P' : mode === 'create' ? 'Genera un código' : 'Introduce el código'}
                   </p>
                 </div>
               </div>
@@ -309,7 +328,7 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, onStartAIGame, is
                   />
                 </div>
 
-                {mode === 'join' && (
+                {(mode === 'join' || mode === 'online-join') && (
                   <div>
                     <label className="block text-emerald-500 text-xs mb-2 font-medium uppercase tracking-wide">Código</label>
                     <input
@@ -331,7 +350,7 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, onStartAIGame, is
 
                 <button
                   type="submit"
-                  disabled={isConnecting || !playerName.trim() || (mode === 'join' && !roomCode.trim())}
+                  disabled={isConnecting || !playerName.trim() || ((mode === 'join' || mode === 'online-join') && !roomCode.trim())}
                   className={`
                     w-full py-3.5 font-semibold rounded-xl transition-all shadow-lg shadow-emerald-500/20
                     ${isConnecting 
@@ -341,7 +360,7 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, onStartAIGame, is
                     disabled:opacity-50 disabled:cursor-not-allowed
                   `}
                 >
-                  {isConnecting ? 'Conectando...' : mode === 'quick' ? 'Comenzar' : mode === 'create' ? 'Crear' : 'Unirse'}
+                  {isConnecting ? 'Conectando...' : mode === 'quick' ? 'Comenzar' : (mode === 'create' || mode === 'online-create') ? 'Crear' : 'Unirse'}
                 </button>
               </div>
             </form>

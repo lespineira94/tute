@@ -70,9 +70,9 @@ interface GameBoardAIProps {
 // Posiciones relativas: 0 = yo (abajo), 1 = derecha, 2 = enfrente, 3 = izquierda
 const POSITION_STYLES = {
   0: 'bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2', // Yo
-  1: 'right-1 sm:right-4 top-[35%] sm:top-1/2 -translate-y-1/2',   // Derecha
-  2: 'top-14 sm:top-4 left-1/2 -translate-x-1/2',    // Enfrente
-  3: 'left-1 sm:left-4 top-[35%] sm:top-1/2 -translate-y-1/2',    // Izquierda
+  1: 'right-1 sm:right-4 top-[40%] sm:top-1/2 -translate-y-1/2',   // Derecha
+  2: 'top-2 sm:top-4 left-1/2 -translate-x-1/2',    // Enfrente
+  3: 'left-1 sm:left-4 top-[40%] sm:top-1/2 -translate-y-1/2',    // Izquierda
 };
 
 // Orden de los palos (oros, copas, espadas, bastos)
@@ -212,20 +212,20 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
     const maxAngle = 30;
     const angle = (offsetFromMiddle / Math.max(total - 1, 1)) * maxAngle * 2;
     
-    // Desplazamiento horizontal
-    const spreadX = 38;
+    // Desplazamiento horizontal (menos separación en móviles)
+    const spreadX = window.innerWidth < 640 ? 18 : 38;
     const translateX = offsetFromMiddle * spreadX;
     
-    // Arco vertical (cartas del centro más arriba)
+    // Arco vertical (cartas del centro más arriba, menos pronunciado en móviles)
     const normalizedOffset = Math.abs(offsetFromMiddle) / Math.max(middleIndex, 1);
-    const arcLift = normalizedOffset * normalizedOffset * 25;
+    const arcLift = normalizedOffset * normalizedOffset * (window.innerWidth < 640 ? 15 : 25);
     
-    // Elevación por selección/validez
+    // Elevación por selección/validez (menos elevación en móviles)
     let translateY = arcLift;
     if (isSelected) {
-      translateY = -40;
+      translateY = window.innerWidth < 640 ? -25 : -40;
     } else if (isValid && isMyTurn) {
-      translateY = arcLift - 15;
+      translateY = arcLift - (window.innerWidth < 640 ? 8 : 15);
     }
     
     return { angle, translateX, translateY };
@@ -331,7 +331,7 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
       </div>
 
       {/* Mesa de juego central - centrada con las cartas */}
-      <div className="absolute top-[40%] sm:top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+      <div className="absolute top-[45%] sm:top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
         <div className="w-[280px] h-[200px] sm:w-[400px] sm:h-[280px] lg:w-[560px] lg:h-[380px] bg-gradient-to-br from-emerald-800/40 to-green-900/50 rounded-[50px] sm:rounded-[80px] lg:rounded-[100px] border-2 border-emerald-600/30 shadow-[0_0_60px_rgba(16,185,129,0.15),inset_0_2px_40px_rgba(0,0,0,0.3)]" />
       </div>
       
@@ -478,12 +478,12 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
               </div>
             </div>
             
-            <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-neutral-800">
-              <div className="flex justify-center gap-1.5 sm:gap-2">
+            <div className="mt-1.5 sm:mt-3 pt-1.5 sm:pt-3 border-t border-neutral-800">
+              <div className="flex justify-center gap-1 sm:gap-2">
                 {[1, 2, 3].map(g => (
                   <div
                     key={g}
-                    className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all ${
+                    className={`w-1.5 h-1.5 sm:w-3 sm:h-3 rounded-full transition-all ${
                       g <= gameState.scores[myTeam].games 
                         ? 'bg-emerald-400 shadow-lg shadow-emerald-400/50' 
                         : g <= gameState.scores[myTeam === 1 ? 2 : 1].games 
@@ -493,16 +493,16 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
                   />
                 ))}
               </div>
-              <div className="text-[7px] sm:text-[9px] text-neutral-600 text-center mt-1">Rondas</div>
+              <div className="text-[6px] sm:text-[9px] text-neutral-600 text-center mt-0.5 sm:mt-1">Rondas</div>
             </div>
             
             {/* Botón historial de bazas */}
             {gameState.trickHistory && gameState.trickHistory.length > 0 && (
               <button
                 onClick={() => setShowTrickHistory(true)}
-                className="mt-2 sm:mt-3 w-full py-1.5 sm:py-2 px-2 sm:px-3 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 rounded-lg text-[10px] sm:text-xs text-emerald-400 flex items-center justify-center gap-1 sm:gap-2 transition-all"
+                className="mt-1.5 sm:mt-3 w-full py-1 sm:py-2 px-1.5 sm:px-3 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 rounded-md sm:rounded-lg text-[9px] sm:text-xs text-emerald-400 flex items-center justify-center gap-1 sm:gap-2 transition-all"
               >
-                <span>📜</span>
+                <span className="text-xs sm:text-base">📜</span>
                 <span>Bazas ({gameState.trickHistory.length})</span>
               </button>
             )}
@@ -510,19 +510,22 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
         </div>
 
         {/* Triunfo */}
-        <div className="absolute top-2 sm:top-4 right-2 sm:right-4 z-20">
-          <TrumpIndicator 
-            trumpSuit={gameState.trumpSuit} 
-            trumpCard={gameState.trumpCard} 
-          />
+        <div className="absolute top-1 sm:top-4 right-1 sm:right-4 z-20">
+          <div className="scale-75 sm:scale-100 origin-top-right">
+            <TrumpIndicator 
+              trumpSuit={gameState.trumpSuit} 
+              trumpCard={gameState.trumpCard} 
+            />
+          </div>
         </div>
 
         {/* Indicador de turno - moderno */}
         {isMyTurn && !isProcessing && (
-          <div className="absolute top-[35%] sm:top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-30">
-            <div className="bg-gradient-to-r from-emerald-500 to-green-500 text-white font-bold px-4 py-2 sm:px-6 sm:py-2.5 rounded-full shadow-xl shadow-emerald-500/40 flex items-center gap-2 text-sm sm:text-base">
-              <span className="w-2 h-2 bg-white/50 rounded-full animate-ping" />
-              ¡Tu turno!
+          <div className="absolute top-[42%] sm:top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-30">
+            <div className="bg-gradient-to-r from-emerald-500 to-green-500 text-white font-bold px-3 py-1.5 sm:px-6 sm:py-2.5 rounded-full shadow-xl shadow-emerald-500/40 flex items-center gap-1.5 sm:gap-2 text-xs sm:text-base">
+              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/50 rounded-full animate-ping" />
+              <span className="hidden sm:inline">¡Tu turno!</span>
+              <span className="sm:hidden">Turno</span>
             </div>
           </div>
         )}
@@ -530,7 +533,7 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
         {/* Botón salir - moderno */}
         <button
           onClick={onExit}
-          className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 px-3 py-2 sm:px-4 sm:py-2.5 bg-neutral-900/80 hover:bg-neutral-800 text-neutral-400 hover:text-white rounded-lg sm:rounded-xl text-xs sm:text-sm z-20 transition-all border border-neutral-800 backdrop-blur-md flex items-center gap-1 sm:gap-2"
+          className="absolute bottom-1 sm:bottom-4 right-1 sm:right-4 px-2 py-1.5 sm:px-4 sm:py-2.5 bg-neutral-900/80 hover:bg-neutral-800 text-neutral-400 hover:text-white rounded-md sm:rounded-xl text-[10px] sm:text-sm z-20 transition-all border border-neutral-800 backdrop-blur-md flex items-center gap-1 sm:gap-2"
         >
           <span>←</span>
           <span className="hidden sm:inline">Salir</span>
@@ -538,12 +541,12 @@ export function GameBoardAI({ gameState, onPlayCard, onDeclareCante, availableCa
       </div>
 
       {/* Mi mano de cartas - en abanico realista */}
-      <div className="bg-gradient-to-t from-neutral-950 via-neutral-900/80 to-transparent pt-1 sm:pt-2 pb-4 sm:pb-8 relative z-10">
-        <div className="max-w-4xl mx-auto px-2">
+      <div className="bg-gradient-to-t from-neutral-950 via-neutral-900/80 to-transparent pt-0 sm:pt-2 pb-2 sm:pb-8 relative z-10">
+        <div className="max-w-4xl mx-auto px-1 sm:px-2">
           {/* Contenedor del abanico */}
           <div 
             className="relative flex items-end justify-center"
-            style={{ height: 'clamp(120px, 25vh, 200px)', perspective: '1000px' }}
+            style={{ height: window.innerWidth < 640 ? 'clamp(80px, 18vh, 120px)' : 'clamp(120px, 25vh, 200px)', perspective: '1000px' }}
           >
             {sortedHand.map((card, idx) => {
               const isValid = validCardIds.has(card.id);
