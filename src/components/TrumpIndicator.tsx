@@ -21,14 +21,14 @@ export function TrumpIndicator({ trumpSuit, trumpCard }: TrumpIndicatorProps) {
   const color = SUIT_COLORS[trumpSuit];
 
   return (
-    <div className="bg-neutral-900/90 backdrop-blur rounded-xl p-3 border border-neutral-800">
-      <div className="text-neutral-500 text-[10px] uppercase tracking-wider mb-2">Triunfo</div>
+    <div className="bg-neutral-900/90 backdrop-blur rounded-lg sm:rounded-xl p-2 sm:p-3 border border-neutral-800">
+      <div className="text-neutral-500 text-[8px] sm:text-[10px] uppercase tracking-wider mb-1 sm:mb-2">Triunfo</div>
       
       {trumpCard ? (
-        <div className="flex flex-col items-center gap-2">
-          <Card card={trumpCard} size="sm" faceUp={true} />
+        <div className="flex flex-col items-center gap-1 sm:gap-2">
+          <Card card={trumpCard} size="xs" faceUp={true} />
           <div 
-            className="text-xs font-semibold px-2 py-0.5 rounded"
+            className="text-[10px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.5 rounded"
             style={{ color, backgroundColor: `${color}20` }}
           >
             {SUIT_NAMES[trumpSuit]}
@@ -36,7 +36,7 @@ export function TrumpIndicator({ trumpSuit, trumpCard }: TrumpIndicatorProps) {
         </div>
       ) : (
         <div 
-          className="text-sm font-bold px-3 py-2 rounded-lg text-center"
+          className="text-xs sm:text-sm font-bold px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-center"
           style={{ color, backgroundColor: `${color}15` }}
         >
           {SUIT_NAMES[trumpSuit]}
