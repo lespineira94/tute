@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fffef0"/>
+      <stop offset="100%" style="stop-color:#f5f5dc"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" rx="100" fill="url(#bg)"/>
+  
+  <!-- Card 1 (back, left) -->
+  <g transform="translate(100, 120) rotate(-15, 80, 130)">
+    <rect width="140" height="200" rx="10" fill="#1e3a5f"/>
+    <rect x="10" y="10" width="120" height="180" rx="8" fill="#2d5a8a" stroke="#3b82f6" stroke-width="2"/>
+    <pattern id="diamonds" patternUnits="userSpaceOnUse" width="20" height="20">
+      <rect width="20" height="20" fill="#2d5a8a"/>
+      <polygon points="10,0 20,10 10,20 0,10" fill="#3b82f6" opacity="0.5"/>
+    </pattern>
+    <rect x="15" y="15" width="110" height="170" rx="5" fill="url(#diamonds)"/>
+  </g>
+  
+  <!-- Card 2 (front, center-right) -->
+  <g transform="translate(180, 100) rotate(10, 80, 130)">
+    <rect width="160" height="220" rx="12" fill="url(#card)" stroke="#2f2f2f" stroke-width="3"/>
+    <!-- Gold coin (Oro) -->
+    <circle cx="80" cy="110" r="45" fill="#daa520" stroke="#8b6914" stroke-width="3"/>
+    <circle cx="80" cy="110" r="35" fill="none" stroke="#8b6914" stroke-width="2"/>
+    <text x="80" y="120" text-anchor="middle" font-family="serif" font-size="36" font-weight="bold" fill="#8b6914">1</text>
+    <!-- Corner numbers -->
+    <text x="20" y="35" font-family="serif" font-size="24" font-weight="bold" fill="#1a1a1a">1</text>
+    <text x="140" y="205" font-family="serif" font-size="24" font-weight="bold" fill="#1a1a1a" text-anchor="end">1</text>
+  </g>
+  
+  <!-- "T" letter overlay -->
+  <text x="256" y="450" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="80" font-weight="900" fill="white" opacity="0.9">TUTE</text>
+</svg>
