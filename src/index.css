@@ -35,3 +35,37 @@ body {
   flex-direction: column;
 }
 
+/* Forzar orientación landscape en móviles */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  body::after {
+    content: '📱 Por favor, gira tu dispositivo\Apara mejor experiencia';
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 2rem;
+    white-space: pre-line;
+  }
+  
+  #root {
+    filter: blur(10px);
+    pointer-events: none;
+  }
+}
+
