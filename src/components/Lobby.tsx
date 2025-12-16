@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { usePWAInstall } from '../hooks/usePWAInstall';
 
 interface LobbyProps {
   onCreateRoom: (playerName: string) => void;
@@ -12,6 +13,7 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, err
   const [mode, setMode] = useState<'select' | 'create' | 'join' | 'quick' | 'rules'>('select');
   const [playerName, setPlayerName] = useState('');
   const [roomCode, setRoomCode] = useState('');
+  const { isInstallable, isInstalled, install } = usePWAInstall();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,7 +101,7 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, err
                 <span className="text-neutral-600 group-hover:translate-x-1 transition-transform">→</span>
               </button>
 
-              <div className="pt-3 border-t border-emerald-800/50">
+              <div className="pt-3 border-t border-emerald-800/50 space-y-2">
                 <button
                   onClick={() => setMode('rules')}
                   className="w-full p-3 text-emerald-600 hover:text-emerald-400 hover:bg-emerald-900/50 rounded-xl transition-all text-sm flex items-center justify-center gap-2"
@@ -107,6 +109,24 @@ export function Lobby({ onCreateRoom, onJoinRoom, onQuickPlay, isConnecting, err
                   <span>📖</span>
                   <span>Cómo jugar</span>
                 </button>
+                
+                {/* Botón de instalación PWA */}
+                {isInstallable && !isInstalled && (
+                  <button
+                    onClick={install}
+                    className="w-full p-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white rounded-xl transition-all text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
+                  >
+                    <span>📲</span>
+                    <span>Instalar App</span>
+                  </button>
+                )}
+                
+                {isInstalled && (
+                  <div className="w-full p-3 text-emerald-500 text-sm flex items-center justify-center gap-2">
+                    <span>✅</span>
+                    <span>App instalada</span>
+                  </div>
+                )}
               </div>
             </div>
           )}
